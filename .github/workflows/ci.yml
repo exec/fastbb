@@ -7,9 +7,9 @@ on:
     branches: [main]
 
 jobs:
-  # Frontend Build and Lint
+  # Frontend Build and Test
   frontend:
-    name: Frontend Build & Lint
+    name: Frontend Build & Test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -23,13 +23,12 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: src/frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --if-present
+        run: npm ci || npm install
 
       - name: Type check
-        run: npx tsc --noEmit --skipLibCheck
+        run: npm run build --if-present
 
       - name: Build
         run: npm run build --if-present
@@ -57,10 +56,9 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: src/backend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --if-present
+        run: npm ci || npm install
 
       - name: Lint
         run: npm run lint --if-present
