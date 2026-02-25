@@ -1,5 +1,8 @@
 # FastBB - Fast, Lightweight Forum Software
 
+[![CI/CD](https://github.com/exec/fastbb/actions/workflows/ci.yml/badge.svg)](https://github.com/exec/fastbb/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 FastBB is a high-performance forum software built with modern web technologies. Designed for speed, ease of use, and flexibility, it features a blazing-fast Express.js backend with SQLite storage, a modern React frontend, and multiple template options.
 
 ## Features
