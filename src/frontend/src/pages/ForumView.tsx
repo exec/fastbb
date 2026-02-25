@@ -2,25 +2,29 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Plus, Search, Filter } from 'lucide-react';
-import { api } from '../utils/apiClient';
+import { api, type Topic as ApiTopic, type Forum as ApiForum } from '../utils/apiClient';
 
-interface Topic {
-  id: number;
-  title: string;
+// Local Topic interface for forum view
+interface Topic extends ApiTopic {
   author_name: string;
   reply_count: number;
-  views: number;
-  created: string;
   pinned: boolean;
   closed: boolean;
   last_post_id: number;
+}
+
+// Local Forum interface
+interface LocalForum {
+  id: number;
+  name: string;
+  description: string;
 }
 
 export function ForumView() {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [forum, setForum] = useState<{ id: number; name: string; description: string } | null>(null);
+  const [forum, setForum] = useState<LocalForum | null>(null);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +42,7 @@ export function ForumView() {
         api.topics.list({ forum_id: parseInt(id) })
       ]);
 
-      setForum(forumData.forum ?? null);
+      setForum((forumData.forum as LocalForum) ?? null);
       setTopics((topicsData.topics || []) as Topic[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
