@@ -29,12 +29,14 @@ export function TopicView() {
   }, [id]);
 
   const fetchTopic = async () => {
+    if (!id) return;
+
     try {
-      const topicData = await api.topics.get(id);
-      setTopic(topicData.topic);
+      const topicData = await api.topics.get(parseInt(id));
+      setTopic((topicData.topic as { id: number; title: string; forum_id: number }) ?? null);
       // Note: The API returns all posts on one page, which is fine for demo
       // In production, implement proper pagination
-      setPosts(topicData.posts || []);
+      setPosts((topicData.posts || []) as Post[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

@@ -25,9 +25,11 @@ export function UserProfile() {
   }, [id]);
 
   const fetchUser = async () => {
+    if (!id) return;
+
     try {
-      const data = await api.users.get(id);
-      setUser(data.user);
+      const data = await api.users.get(parseInt(id));
+      setUser(data.user ?? null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

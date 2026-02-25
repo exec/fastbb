@@ -20,9 +20,11 @@ export function NewPost() {
 
   useEffect(() => {
     // Fetch topic title
-    api.topics.get(id)
-      .then(data => setTopicTitle(data.topic?.title || 'Topic'))
-      .catch(() => {});
+    if (id) {
+      api.topics.get(parseInt(id))
+        .then(data => setTopicTitle(data.topic?.title || 'Topic'))
+        .catch(() => {});
+    }
   }, [id]);
 
   if (!isAuthenticated) {

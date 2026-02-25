@@ -30,14 +30,16 @@ export function ForumView() {
   }, [id]);
 
   const fetchForum = async () => {
+    if (!id) return;
+
     try {
       const [forumData, topicsData] = await Promise.all([
-        api.forums.get(id),
-        api.topics.list({ forum_id: id })
+        api.forums.get(parseInt(id)),
+        api.topics.list({ forum_id: parseInt(id) })
       ]);
 
-      setForum(forumData.forum);
-      setTopics(topicsData.topics || []);
+      setForum(forumData.forum ?? null);
+      setTopics((topicsData.topics || []) as Topic[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

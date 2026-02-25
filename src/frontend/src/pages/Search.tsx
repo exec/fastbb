@@ -33,7 +33,7 @@ export function Search() {
 
     try {
       const data = await api.search.search(query, 'all');
-      setResults(data.results || []);
+      setResults((data.results || []) as SearchResult[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

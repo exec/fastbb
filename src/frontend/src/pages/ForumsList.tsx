@@ -37,7 +37,9 @@ export function ForumsList() {
   const fetchForums = async () => {
     try {
       const data = await api.forums.list();
-      setCategories(data.forums || []);
+      // Transform Forum[] to Category[] structure
+      const forums = (data.forums || []) as Forum[];
+      setCategories([{ id: 0, name: 'All Forums', description: 'All forum categories', forums }]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
