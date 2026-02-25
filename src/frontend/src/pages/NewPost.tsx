@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, type ReactNode } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { ArrowLeft, Send } from 'lucide-react';
 import { api } from '../utils/apiClient';
+
+interface PostData {
+  topic_id: number;
+  content: string;
+}
 
 export function NewPost() {
   const { id } = useParams<{ id: string }>();
@@ -31,10 +36,11 @@ export function NewPost() {
     setError(null);
 
     try {
-      await api.posts.create({
+      const data: PostData = {
         topic_id: parseInt(id || '0'),
         content,
-      });
+      };
+      await api.posts.create(data);
       navigate(`/topic/${id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');

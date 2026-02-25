@@ -32,6 +32,7 @@ function App() {
   }, [darkMode]);
 
   const toggleTheme = () => setDarkMode(!darkMode);
+  void toggleTheme; // Avoid unused variable warning
 
   return (
     <ThemeProvider>
