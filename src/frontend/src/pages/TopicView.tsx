@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { api, type Post as ApiPost, type Topic as ApiTopic } from '../utils/apiClient';
+import { api } from '../utils/apiClient';
 import { sanitizePostContent } from '../utils/sanitize';
 
-// Local Post interface extending API Post with additional fields from the backend response
-interface Post extends ApiPost {
+// Local Post interface with additional fields from the backend response
+interface Post {
+  id: number;
+  content: string;
+  user_id: number;
   username: string;
   email: string;
   joined: string;
   is_active: number;
+  created: string;
   post_count: number;
 }
 
 // Local Topic interface for the state
-interface LocalTopic {
+interface Topic {
   id: number;
   title: string;
   forum_id: number;
@@ -23,7 +27,7 @@ interface LocalTopic {
 export function TopicView() {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated } = useAuth();
-  const [topic, setTopic] = useState<LocalTopic | null>(null);
+  const [topic, setTopic] = useState<Topic | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +41,7 @@ export function TopicView() {
 
     try {
       const topicData = await api.topics.get(parseInt(id));
-      setTopic((topicData.topic as LocalTopic) ?? null);
+      setTopic((topicData.topic as Topic) ?? null);
       // Note: The API returns all posts on one page, which is fine for demo
       // In production, implement proper pagination
       setPosts((topicData.posts || []) as Post[]);

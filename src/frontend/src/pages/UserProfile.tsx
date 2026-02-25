@@ -1,10 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { api, type User as ApiUser } from '../utils/apiClient';
+import { api } from '../utils/apiClient';
 
-// Local User interface extending API User
-interface User extends ApiUser {
+// Local User interface
+interface User {
+  id: number;
+  username: string;
+  email: string;
+  group_id: number;
+  is_active: number;
+  joined: string;
   last_visit: string | null;
   topics_count: number;
   posts_count: number;

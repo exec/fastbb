@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { api, type Forum as ApiForum } from '../utils/apiClient';
+import { api } from '../utils/apiClient';
 
-// Local Forum interface extending API Forum
-interface Forum extends ApiForum {
+// Local Forum interface
+interface Forum {
+  id: number;
+  name: string;
+  description: string;
   thread_count: number;
   post_count: number;
   latest_post?: {
@@ -36,7 +39,7 @@ export function ForumsList() {
   const fetchForums = async () => {
     try {
       const data = await api.forums.list();
-      // Transform ApiForum[] to Forum[] and wrap in Category structure
+      // Transform raw API forums to local Forum type
       const forums = (data.forums || []) as Forum[];
       setCategories([{ id: 0, name: 'All Forums', description: 'All forum categories', forums }]);
     } catch (err) {
