@@ -40,7 +40,7 @@ export function ForumsList() {
     try {
       const data = await api.forums.list();
       // Transform raw API forums to local Forum type
-      const forums = (data.forums || []) as Forum[];
+      const forums = (data.forums || []) as unknown as Forum[];
       setCategories([{ id: 0, name: 'All Forums', description: 'All forum categories', forums }]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');

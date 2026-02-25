@@ -44,7 +44,7 @@ export function TopicView() {
       setTopic((topicData.topic as Topic) ?? null);
       // Note: The API returns all posts on one page, which is fine for demo
       // In production, implement proper pagination
-      setPosts((topicData.posts || []) as Post[]);
+      setPosts((topicData.posts || []) as unknown as Post[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

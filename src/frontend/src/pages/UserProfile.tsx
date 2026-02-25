@@ -32,7 +32,7 @@ export function UserProfile() {
 
     try {
       const data = await api.users.get(parseInt(id));
-      setUser(data.user ?? null);
+      setUser((data.user as User) ?? null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

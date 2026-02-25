@@ -47,7 +47,7 @@ export function ForumView() {
       ]);
 
       setForum((forumData.forum as Forum) ?? null);
-      setTopics((topicsData.topics || []) as Topic[]);
+      setTopics((topicsData.topics || []) as unknown as Topic[]);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
