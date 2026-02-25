@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ topic.title }} - {{ site_title }}</title>
+    <link rel="stylesheet" href="{{ template_path }}/style.css">
+    <link rel="alternate" type="application/rss+xml" title="{{ topic.title }} - {{ site_title }}" href="{{ site_url }}/topic/{{ topic.id }}/rss.php">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+                <li><a href="{{ site_url }}/">{{ site_title }}</a></li>
+                {% for parent in topic.forum_path %}
+                    <li><a href="{{ parent.url }}">{{ parent.name }}</a></li>
+                {% endfor %}
+                <li><a href="{{ forum.url }}">{{ forum.name }}</a></li>
+                <li aria-current="page">{{ topic.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="topic-container">
+            {% if posts and posts|length > 0 %}
+                <div class="post-list">
+                    {% for post in posts %}
+                        <article class="post {% if post.is_first %}first-post{% endif %} {% if post.is_author_op %}op-post{% endif %}" id="post-{{ post.id }}">
+                            <div class="post-header">
+                                <div class="author-info">
+                                    <div class="avatar">
+                                        <img src="{{ post.avatar_url }}" alt="{{ post.author }}" onerror="this.style.display='none'">
+                                        <span class="initials">{{ post.author.charAt(0).toUpperCase() }}</span>
+                                    </div>
+                                    <div class="author-details">
+                                        <h4 class="author-name">{{ post.author }}</h4>
+                                        {% if post.user_title %}
+                                            <span class="user-title">{{ post.user_title }}</span>
+                                        {% endif %}
+                                        <div class="post-meta">
+                                            <span class="joined">Joined {{ post.joined_date }}</span>
+                                            <span class="posts">Posts: {{ post.post_count }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="post-meta">
+                                    <time datetime="{{ post.created_iso }}">{{ post.created }}</time>
+                                    {% if post.edited %}
+                                        <span class="edited">Edited {{ post.edited }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="post-content">
+                                {{ post.content_html }}
+                            </div>
+
+                            <div class="post-footer">
+                                {% if post.can_edit %}
+                                    <a href="{{ post.edit_url }}" class="btn btn-sm">Edit</a>
+                                {% endif %}
+                                {% if post.can_delete %}
+                                    <a href="{{ post.delete_url }}" class="btn btn-sm btn-danger">Delete</a>
+                                {% endif %}
+                                <a href="{{ post.quote_url }}" class="btn btn-sm btn-secondary">Quote</a>
+                                <a href="{{ post.reply_url }}" class="btn btn-sm btn-primary">Reply</a>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+
+                {% if pagination.show %}
+                    <nav class="pagination" aria-label="Posts pagination">
+                        <ul class="pagination-list">
+                            {% if pagination.prev_url %}
+                                <li><a href="{{ pagination.prev_url }}" class="page-link">Previous</a></li>
+                            {% endif %}
+                            {% for page in pagination.pages %}
+                                {% if page.url %}
+                                    <li><a href="{{ page.url }}" class="page-link{% if page.active %} active{% endif %}">{{ page.number }}</a></li>
+                                {% else %}
+                                    <li><span class="page-separator">...</span></li>
+                                {% endif %}
+                            {% endfor %}
+                            {% if pagination.next_url %}
+                                <li><a href="{{ pagination.next_url }}" class="page-link">Next</a></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            {% else %}
+                <div class="no-posts">
+                    <p>No posts yet. Be the first to reply!</p>
+                </div>
+            {% endif %}
+
+            {% if current_user.is_logged_in and not topic.closed %}
+                <div class="reply-box">
+                    <h3>Reply to {{ topic.title }}</h3>
+                    <form method="post" action="{{ site_url }}/post.php">
+                        <textarea name="content" placeholder="Write your reply..." required></textarea>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Post Reply</button>
+                            <a href="{{ forum.url }}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

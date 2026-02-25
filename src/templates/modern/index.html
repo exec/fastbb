@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_title }} - Modern Forum</title>
+    <link rel="stylesheet" href="{{ template_path }}/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="modern-template">
+    {% include 'header.html' %}
+
+    <main class="container">
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="{{ site_url }}/">{{ site_title }}</a></li>
+                <li aria-current="page">{{ lang.forum_index }}</li>
+            </ol>
+        </nav>
+
+        {% if forum_categories and forum_categories|length > 0 %}
+            <div class="forum-list">
+                {% for category in forum_categories %}
+                    <section class="forum-category">
+                        <div class="category-header">
+                            <h2 class="category-title">{{ category.name }}</h2>
+                            {% if category.description %}
+                                <p class="category-desc">{{ category.description }}</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="forum-grid">
+                            {% for forum in category.forums %}
+                                <div class="forum-card">
+                                    <div class="forum-icon-box">
+                                        {% if forum.has_new_posts %}
+                                            <span class="icon icon-new" title="{{ lang.new_posts }}"></span>
+                                        {% endif %}
+                                        {% if forum.is_category %}
+                                            <span class="icon icon-folder" title="{{ lang.category }}"></span>
+                                        {% else %}
+                                            <span class="icon icon-forum" title="{{ lang.forum }}"></span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="forum-content">
+                                        <h3 class="forum-title"><a href="{{ forum.url }}">{{ forum.name }}</a></h3>
+                                        {% if forum.description %}
+                                            <p class="forum-desc">{{ forum.description }}</p>
+                                        {% endif %}
+                                        {% if forum.sub_forums %}
+                                            <div class="sub-forums">
+                                                <span class="sub-label">{{ lang.sub_forums }}:</span>
+                                                {% for sub in forum.sub_forums %}
+                                                    <a href="{{ sub.url }}" class="sub-link">{{ sub.name }}</a>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="forum-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-value">{{ forum.thread_count }}</span>
+                                            <span class="stat-label">{{ lang.threads }}</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-value">{{ forum.post_count }}</span>
+                                            <span class="stat-label">{{ lang.posts }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="forum-latest">
+                                        {% if forum.latest_post %}
+                                            <div class="latest-box">
+                                                <a href="{{ forum.latest_post.url }}" class="latest-title">{{ forum.latest_post.title }}</a>
+                                                <div class="latest-author">
+                                                    <span class="by-text">{{ lang.by }}</span>
+                                                    <a href="{{ forum.latest_post.author_url }}" class="author-name">{{ forum.latest_post.author }}</a>
+                                                </div>
+                                                <time class="latest-time" datetime="{{ forum.latest_post.date_iso }}">{{ forum.latest_post.date }}</time>
+                                            </div>
+                                        {% else %}
+                                            <span class="no-posts-text">{{ lang.no_posts }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-forums">
+                <p>{{ lang.no_forums_available }}</p>
+            </div>
+        {% endif %}
+
+        <div class="actions-bar">
+            <div class="action-group">
+                <a href="{{ site_url }}/search.php" class="action-btn secondary">
+                    <span class="btn-icon">🔍</span>
+                    <span>{{ lang.search }}</span>
+                </a>
+                <a href="{{ site_url }}/members.php" class="action-btn secondary">
+                    <span class="btn-icon">👥</span>
+                    <span>{{ lang.members }}</span>
+                </a>
+                {% if current_user.is_logged_in %}
+                    <a href="{{ site_url }}/misc.php?action=markread" class="action-btn primary">
+                        <span class="btn-icon">✓</span>
+                        <span>{{ lang.mark_all_read }}</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <aside class="sidebar">
+            {% if current_user.is_logged_in %}
+                <div class="sidebar-section">
+                    <h3>{{ lang.user_control_panel }}</h3>
+                    <nav class="sidebar-nav">
+                        <a href="{{ current_user.profile_url }}" class="sidebar-link">
+                            <span class="link-icon">👤</span>
+                            <span>{{ lang.profile }}</span>
+                        </a>
+                        <a href="{{ site_url }}/private.php" class="sidebar-link">
+                            <span class="link-icon">📩</span>
+                            <span>{{ lang.private_messages }}</span>
+                        </a>
+                        <a href="{{ site_url }}/usercp.php" class="sidebar-link">
+                            <span class="link-icon">⚙️</span>
+                            <span>{{ lang.user_cp }}</span>
+                        </a>
+                        <a href="{{ site_url }}/misc.php?action=logout" class="sidebar-link">
+                            <span class="link-icon">🚪</span>
+                            <span>{{ lang.logout }}</span>
+                        </a>
+                    </nav>
+                </div>
+            {% else %}
+                <div class="sidebar-section login-box">
+                    <h3>{{ lang.account }}</h3>
+                    <form method="post" action="{{ site_url }}/login.php" class="login-form">
+                        <input type="text" name="username" placeholder="{{ lang.username }}" required>
+                        <input type="password" name="password" placeholder="{{ lang.password }}" required>
+                        <button type="submit" class="btn-login">{{ lang.login }}</button>
+                    </form>
+                    <div class="login-links">
+                        <a href="{{ site_url }}/register.php">{{ lang.register }}</a>
+                        <a href="{{ site_url }}/misc.php?action=lostpass">{{ lang.forgot_password }}</a>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="sidebar-section">
+                <h3>{{ lang.stats }}</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">{{ lang.total_threads }}</span>
+                        <span class="stat-value">{{ stats.total_threads }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">{{ lang.total_posts }}</span>
+                        <span class="stat-value">{{ stats.total_posts }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">{{ lang.total_members }}</span>
+                        <span class="stat-value">{{ stats.total_members }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">{{ lang.newest_member }}</span>
+                        <a href="{{ stats.newest_member_url }}" class="stat-link">{{ stats.newest_member }}</a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

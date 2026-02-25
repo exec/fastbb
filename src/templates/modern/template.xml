@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <name>Modern</name>
+    <version>1.0.0</version>
+    <author>FastBB Team</author>
+    <description>Modern gradient-themed template with glassmorphism effects and vibrant colors</description>
+    <template_set_id>modern</template_set_id>
+    <copyright>Copyright 2024 FastBB</copyright>
+    <license>MIT</license>
+    <features>
+        <responsive>true</responsive>
+        <dark_mode>true</dark_mode>
+        <accessibility>true</accessibility>
+        <bbcode>true</bbcode>
+        <smilies>true</smilies>
+        <animations>true</animations>
+    </features>
+    <files>
+        <file>index.html</file>
+        <file>forum.html</file>
+        <file>topic.html</file>
+        <file>post_form.html</file>
+        <file>user_profile.html</file>
+        <file>header.html</file>
+        <file>footer.html</file>
+        <file>style.css</file>
+    </files>
+    <colors>
+        <primary>#667eea</primary>
+        <secondary>#f5576c</secondary>
+        <background>#f5f7fa</background>
+        <surface>#ffffff</surface>
+        <text>#333333</text>
+        <text_secondary>#64748b</text_secondary>
+    </colors>
+</template>

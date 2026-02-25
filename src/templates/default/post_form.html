@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ lang.post_form }} - {{ site_title }}</title>
+    <link rel="stylesheet" href="{{ template_path }}/style.css">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+                <li><a href="{{ site_url }}/">{{ site_title }}</a></li>
+                <li><a href="{{ forum.url }}">{{ forum.name }}</a></li>
+                {% if topic %}
+                    <li><a href="{{ topic.url }}">{{ topic.title }}</a></li>
+                {% endif %}
+                <li aria-current="page">{{ lang.post_form }}</li>
+            </ol>
+        </nav>
+
+        <div class="post-form-container">
+            <h1>{{ lang.post_form }}</h1>
+
+            {% if error %}
+                <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" action="{{ form_action }}" class="post-form">
+                {% if topic %}
+                    <div class="form-group">
+                        <label for="subject">{{ lang.subject }}</label>
+                        <input type="text" id="subject" name="subject" value="{{ subject }}" required maxlength="100">
+                    </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="message">{{ lang.message }}</label>
+                    <textarea id="message" name="message" rows="10" required>{{ message }}</textarea>
+                    <p class="form-hint">{{ lang.bb_codes_enabled }}</p>
+                </div>
+
+                {% if can_subscribe %}
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="subscribe" name="subscribe" value="1" {% if subscribe %}checked{% endif %}>
+                        <label for="subscribe">{{ lang.subscribe_to_thread }}</label>
+                    </div>
+                {% endif %}
+
+                <div class="form-actions">
+                    <button type="submit" name="submit" value="submit" class="btn btn-primary">{{ lang.submit_post }}</button>
+                    <button type="submit" name="submit" value="preview" class="btn btn-secondary">{{ lang.preview }}</button>
+                    <a href="{{ cancel_url }}" class="btn btn-secondary">{{ lang.cancel }}</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

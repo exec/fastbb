@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site_title }} - {{ lang.forum_index }}</title>
+    <link rel="stylesheet" href="{{ template_path }}/style.css">
+    <link rel="alternate" type="application/rss+xml" title="{{ site_title }} - {{ lang.latest_threads }}" href="{{ site_url }}/rss.php">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol>
+                <li><a href="{{ site_url }}/">{{ site_title }}</a></li>
+                <li aria-current="page">{{ lang.forum_index }}</li>
+            </ol>
+        </nav>
+
+        {% if forum_categories and forum_categories|length > 0 %}
+            <div class="forum-list">
+                {% for category in forum_categories %}
+                    <section class="forum-category" aria-labelledby="category-{{ category.id }}">
+                        <h2 id="category-{{ category.id }}" class="category-title">
+                            <a href="{{ category.url }}">{{ category.name }}</a>
+                        </h2>
+                        <div class="category-description">{{ category.description }}</div>
+
+                        <div class="forum-table" role="table">
+                            <div class="forum-header" role="row" class="header">
+                                <div class="forum-icon" role="columnheader">{{ lang.forum }}</div>
+                                <div class="forum-stats" role="columnheader">{{ lang.threads }}</div>
+                                <div class="forum-latest" role="columnheader">{{ lang.last_post }}</div>
+                            </div>
+
+                            {% for forum in category.forums %}
+                                <div class="forum-row" role="row" aria-labelledby="forum-{{ forum.id }}">
+                                    <div class="forum-icon" role="cell" id="forum-{{ forum.id }}">
+                                        {% if forum.has_new_posts %}
+                                            <span class="icon icon-new" aria-label="{{ lang.new_posts }}"></span>
+                                        {% endif %}
+                                        {% if forum.is_category %}
+                                            <span class="icon icon-folder" aria-label="{{ lang.category }}"></span>
+                                        {% else %}
+                                            <span class="icon icon-forum" aria-label="{{ lang.forum }}"></span>
+                                        {% endif %}
+                                        <div class="forum-info">
+                                            <h3 class="forum-title">
+                                                <a href="{{ forum.url }}" class="forum-name">{{ forum.name }}</a>
+                                            </h3>
+                                            {% if forum.description %}
+                                                <p class="forum-description">{{ forum.description }}</p>
+                                            {% endif %}
+                                            {% if forum.moderators and forum.moderators|length > 0 %}
+                                                <p class="forum-moderators">
+                                                    <span class="mod-label">{{ lang.moderated_by }}</span>
+                                                    {% for mod in forum.moderators %}
+                                                        <a href="{{ mod.profile_url }}" class="moderator">{{ mod.name }}</a>{% if not loop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </p>
+                                            {% endif %}
+                                            {% if forum.sub_forums and forum.sub_forums|length > 0 %}
+                                                <div class="sub-forums">
+                                                    <span class="sub-label">{{ lang.sub_forums }}:</span>
+                                                    {% for sub in forum.sub_forums %}
+                                                        <a href="{{ sub.url }}" class="sub-forum">{{ sub.name }}</a>{% if not loop.last %}, {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="forum-stats" role="cell">
+                                        <div class="stat-item">
+                                            <span class="stat-label">{{ lang.threads }}:</span>
+                                            <span class="stat-value">{{ forum.thread_count }}</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-label">{{ lang.posts }}:</span>
+                                            <span class="stat-value">{{ forum.post_count }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="forum-latest" role="cell">
+                                        {% if forum.latest_post %}
+                                            <div class="latest-post">
+                                                <a href="{{ forum.latest_post.url }}" class="latest-title">{{ forum.latest_post.title }}</a>
+                                                <div class="latest-author">
+                                                    {{ lang.by }} <a href="{{ forum.latest_post.author_url }}">{{ forum.latest_post.author }}</a>
+                                                </div>
+                                                <time datetime="{{ forum.latest_post.date_iso }}" class="latest-date">{{ forum.latest_post.date }}</time>
+                                            </div>
+                                        {% else %}
+                                            <span class="no-posts">{{ lang.no_posts }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-forums">
+                <p>{{ lang.no_forums_available }}</p>
+            </div>
+        {% endif %}
+
+        <section class="forum-actions">
+            <div class="action-buttons">
+                <a href="{{ site_url }}/search.php" class="btn btn-secondary">
+                    <span class="btn-icon">🔍</span>
+                    {{ lang.search }}
+                </a>
+                <a href="{{ site_url }}/members.php" class="btn btn-secondary">
+                    <span class="btn-icon">👥</span>
+                    {{ lang.members }}
+                </a>
+                {% if current_user.is_logged_in %}
+                    <a href="{{ site_url }}/misc.php?action=markread" class="btn btn-primary">
+                        <span class="btn-icon">✓</span>
+                        {{ lang.mark_all_read }}
+                    </a>
+                {% endif %}
+            </div>
+        </section>
+
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>{{ lang.quick_links }}</h3>
+                <ul class="sidebar-menu">
+                    <li><a href="{{ site_url }}/index.php">{{ lang.forum_index }}</a></li>
+                    <li><a href="{{ site_url }}/search.php">{{ lang.search }}</a></li>
+                    <li><a href="{{ site_url }}/members.php">{{ lang.members }}</a></li>
+                    <li><a href="{{ site_url }}/calendar.php">{{ lang.calendar }}</a></li>
+                </ul>
+            </div>
+
+            {% if current_user.is_logged_in %}
+                <div class="sidebar-section">
+                    <h3>{{ lang.user_control_panel }}</h3>
+                    <ul class="sidebar-menu">
+                        <li><a href="{{ current_user.profile_url }}">{{ lang.profile }}</a></li>
+                        <li><a href="{{ site_url }}/private.php">{{ lang.private_messages }}</a></li>
+                        <li><a href="{{ site_url }}/usercp.php">{{ lang.user_cp }}</a></li>
+                        <li><a href="{{ site_url }}/misc.php?action=logout">{{ lang.logout }}</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <div class="sidebar-section">
+                    <h3>{{ lang.account }}</h3>
+                    <div class="login-form">
+                        <form method="post" action="{{ site_url }}/login.php">
+                            <input type="text" name="username" placeholder="{{ lang.username }}" required>
+                            <input type="password" name="password" placeholder="{{ lang.password }}" required>
+                            <button type="submit" class="btn btn-primary btn-block">{{ lang.login }}</button>
+                        </form>
+                        <div class="login-links">
+                            <a href="{{ site_url }}/register.php">{{ lang.register }}</a>
+                            <a href="{{ site_url }}/misc.php?action=lostpass">{{ lang.forgot_password }}</a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="sidebar-section">
+                <h3>{{ lang.stats }}</h3>
+                <dl class="stats-list">
+                    <dt>{{ lang.total_threads }}:</dt>
+                    <dd>{{ stats.total_threads }}</dd>
+                    <dt>{{ lang.total_posts }}:</dt>
+                    <dd>{{ stats.total_posts }}</dd>
+                    <dt>{{ lang.total_members }}:</dt>
+                    <dd>{{ stats.total_members }}</dd>
+                    <dt>{{ lang.newest_member }}:</dt>
+                    <dd><a href="{{ stats.newest_member_url }}">{{ stats.newest_member }}</a></dd>
+                </dl>
+            </div>
+        </aside>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>

@@ -1,0 +1,419 @@
+/* FastBB Classic Template - MyBB-inspired */
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 13px;
+}
+
+body {
+    font-family: Verdana, Arial, sans-serif;
+    line-height: 1.5;
+    color: #333;
+    background-color: #e8e8e8;
+}
+
+/* Container */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    gap: 15px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    padding: 8px 10px;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+    font-size: 11px;
+}
+
+.breadcrumb a {
+    color: #333;
+    text-decoration: none;
+}
+
+/* Header */
+.header {
+    background: #4a698a;
+    color: white;
+    padding: 15px 10px;
+    margin-bottom: 15px;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo a {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+.main-nav {
+    display: flex;
+    gap: 10px;
+}
+
+.main-nav a {
+    color: #e8e8e8;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.main-nav a:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+/* Forum List */
+.forum-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.forum-table {
+    background: #e8e8e8;
+    border: 1px solid #aaa;
+    width: 100%;
+}
+
+.category {
+    background: #6b8ca0;
+    color: white;
+    font-size: 13px;
+    padding: 8px 10px;
+}
+
+.category-title {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.category-title a {
+    color: white;
+    text-decoration: none;
+}
+
+.category-description {
+    display: block;
+    color: #e8e8e8;
+    font-size: 11px;
+}
+
+.thead {
+    background: #dce4ec;
+}
+
+.thead td {
+    font-weight: bold;
+    color: #333;
+    padding: 8px;
+}
+
+.forum-item {
+    background: #fff;
+}
+
+.forum-item:hover {
+    background: #f8f8f8;
+}
+
+.forum-icon {
+    width: 40px;
+    text-align: center;
+    padding: 8px 5px;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+}
+
+.forum-name {
+    flex: 1;
+}
+
+.forum-title {
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.forum-link {
+    color: #2c5d8a;
+    text-decoration: none;
+}
+
+.forum-link:hover {
+    text-decoration: underline;
+}
+
+.forum-description {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.forum-moderators {
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.moderator-link {
+    color: #666;
+    text-decoration: none;
+}
+
+.sub-forums {
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.sub-label {
+    color: #999;
+}
+
+.sub-forum-link {
+    color: #666;
+    text-decoration: none;
+}
+
+.forum-stats, .forum-latest {
+    padding: 8px;
+    text-align: center;
+    font-size: 11px;
+}
+
+.stat-row {
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #333;
+}
+
+.latest-post {
+    text-align: left;
+}
+
+.latest-title {
+    color: #2c5d8a;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.latest-author {
+    color: #666;
+}
+
+.latest-time {
+    color: #999;
+    font-size: 10px;
+}
+
+.no-posts {
+    color: #999;
+    font-size: 11px;
+}
+
+/* Sidebar */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar-box {
+    background: #fff;
+    border: 1px solid #aaa;
+    padding: 10px;
+}
+
+.sidebar-title {
+    background: #dce4ec;
+    padding: 6px 10px;
+    font-weight: bold;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    margin-bottom: 4px;
+}
+
+.sidebar-menu a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+    padding: 4px 8px;
+}
+
+.sidebar-menu a:hover {
+    background: #f0f0f0;
+    text-decoration: underline;
+}
+
+.login-box {
+    text-align: center;
+}
+
+.login-form {
+    margin-bottom: 10px;
+}
+
+.form-row {
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 4px;
+    border: 1px solid #aaa;
+    font-size: 11px;
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 4px;
+    background: #4a698a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-submit:hover {
+    background: #5a799a;
+}
+
+.login-links {
+    font-size: 11px;
+}
+
+.login-links a {
+    color: #333;
+    text-decoration: none;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}
+
+.stats-table {
+    width: 100%;
+}
+
+.stats-label {
+    font-size: 11px;
+    color: #666;
+}
+
+.stats-value {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Forum Actions */
+.forum-actions {
+    background: #fff;
+    border: 1px solid #aaa;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.action-link {
+    color: #2c5d8a;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.action-link:hover {
+    text-decoration: underline;
+}
+
+/* Footer */
+.footer {
+    background: #fff;
+    border: 1px solid #aaa;
+    padding: 15px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.footer-links a {
+    color: #333;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-copyright {
+    font-size: 11px;
+    color: #666;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        order: -1;
+    }
+
+    .header .container {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .main-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .forum-table {
+        display: block;
+        overflow-x: auto;
+    }
+
+    .category-title {
+        font-size: 12px;
+    }
+
+    .sidebar-menu a {
+        font-size: 11px;
+    }
+}

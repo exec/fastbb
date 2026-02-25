@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }} - {{ site_title }}</title>
+    <link rel="stylesheet" href="{{ template_path }}/style.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="header">
+            <div class="container">
+                <div class="logo">
+                    <a href="{{ site_url }}/">{{ site_title }}</a>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="{{ site_url }}/index.php">{{ lang.forum_index }}</a></li>
+                        <li><a href="{{ site_url }}/search.php">{{ lang.search }}</a></li>
+                        <li><a href="{{ site_url }}/members.php">{{ lang.members }}</a></li>
+                        <li><a href="{{ site_url }}/calendar.php">{{ lang.calendar }}</a></li>
+                        {% if current_user.is_logged_in %}
+                            <li><a href="{{ current_user.profile_url }}">{{ lang.profile }}</a></li>
+                            <li><a href="{{ site_url }}/private.php">{{ lang.messages }}</a></li>
+                            <li><a href="{{ site_url }}/misc.php?action=logout">{{ lang.logout }}</a></li>
+                        {% else %}
+                            <li><a href="{{ site_url }}/login.php">{{ lang.login }}</a></li>
+                            <li><a href="{{ site_url }}/register.php">{{ lang.register }}</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <div class="container">
+            {% if current_user.is_logged_in %}
+                <div class="user-bar">
+                    <span class="welcome">{{ lang.welcome }} <strong>{{ current_user.username }}</strong></span>
+                    <span class="time">{{ current_time }}</span>
+                    <a href="{{ site_url }}/misc.php?action=markread" class="mark-read">{{ lang.mark_all_read }}</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>

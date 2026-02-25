@@ -1,0 +1,20 @@
+{
+  "name": "fastbb",
+  "version": "0.1.0",
+  "description": "FastBB - Fast, lightweight forum software",
+  "private": true,
+  "workspaces": [
+    "src/backend",
+    "src/frontend",
+    "src/installer"
+  ],
+  "scripts": {
+    "install:all": "npm install && npm run install --workspace=src/backend && npm run install --workspace=src/frontend",
+    "dev": "concurrently \"npm run dev --workspace=src/backend\" \"npm run dev --workspace=src/frontend\"",
+    "build": "npm run build --workspace=src/frontend",
+    "start": "npm start --workspace=src/backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

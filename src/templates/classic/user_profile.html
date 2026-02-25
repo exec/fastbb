@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }} - {{ site_title }}</title>
+    <link rel="stylesheet" href="{{ template_path }}/style.css">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{{ site_url }}/">{{ site_title }}</a> &rsaquo;
+            <a href="{{ site_url }}/members.php">{{ lang.members }}</a> &rsaquo;
+            {{ user.username }}
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="avatar-large">
+                    <img src="{{ user.avatar_url }}" alt="{{ user.username }}" onerror="this.style.display='none'">
+                    <span class="initials">{{ user.username.charAt(0).toUpperCase() }}</span>
+                </div>
+                <div class="profile-info">
+                    <h1>{{ user.username }}</h1>
+                    <p class="user-title">{{ user.user_title }}</p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="label">{{ lang.joined }}</span>
+                            <span class="value">{{ user.joined }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">{{ lang.last_visit }}</span>
+                            <span class="value">{{ user.last_visit }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">{{ lang.total_posts }}</span>
+                            <span class="value">{{ user.post_count }}</span>
+                        </div>
+                        <div class="stat">
+                            <span class="label">{{ lang.topics_started }}</span>
+                            <span class="value">{{ user.topic_count }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% if is_own_profile or current_user.is_admin %}
+                    <div class="profile-actions">
+                        <a href="{{ edit_profile_url }}" class="btn btn-primary">{{ lang.edit_profile }}</a>
+                        {% if is_own_profile %}
+                            <a href="{{ privacy_settings_url }}" class="btn btn-secondary">{{ lang.privacy_settings }}</a>
+                        {% endif %}
+                        {% if current_user.is_admin %}
+                            <a href="{{ admin_actions_url }}" class="btn btn-secondary">{{ lang.admin_actions }}</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-tabs">
+                    <ul class="tabs">
+                        <li><a href="{{ user.url }}" class="active">{{ lang.overview }}</a></li>
+                        <li><a href="{{ user.url }}/topics">{{ lang.topics }}</a></li>
+                        <li><a href="{{ user.url }}/posts">{{ lang.posts }}</a></li>
+                        <li><a href="{{ user.url }}/watched">{{ lang.watched_threads }}</a></li>
+                        {% if current_user.is_admin %}
+                            <li><a href="{{ user.url }}/moderation">{{ lang.moderation }}</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="tab-content">
+                    <h2>{{ lang.overview }}</h2>
+                    <div class="user-details">
+                        <dl>
+                            <dt>{{ lang.email }}</dt>
+                            <dd>{{ user.email }}</dd>
+                            <dt>{{ lang.website }}</dt>
+                            <dd><a href="{{ user.website_url }}" target="_blank">{{ user.website }}</a></dd>
+                            <dt>{{ lang.location }}</dt>
+                            <dd>{{ user.location }}</dd>
+                            <dt>{{ lang.interests }}</dt>
+                            <dd>{{ user.interests }}</dd>
+                            <dt>{{ lang.bio }}</dt>
+                            <dd>{{ user.bio }}</dd>
+                        </dl>
+                    </div>
+
+                    {% if current_user.is_admin %}
+                        <div class="admin-section">
+                            <h3>{{ lang.admin_note }}</h3>
+                            <p>{{ lang.admin_note_text }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'footer.html' %}
+</body>
+</html>

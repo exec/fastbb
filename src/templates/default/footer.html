@@ -1,0 +1,38 @@
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>{{ site_title }}</h4>
+                    <ul>
+                        <li><a href="{{ site_url }}/index.php">{{ lang.forum_index }}</a></li>
+                        <li><a href="{{ site_url }}/search.php">{{ lang.search }}</a></li>
+                        <li><a href="{{ site_url }}/members.php">{{ lang.members }}</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>{{ lang.community }}</h4>
+                    <ul>
+                        <li><a href="{{ site_url }}/rules.php">{{ lang.rules }}</a></li>
+                        <li><a href="{{ site_url }}/help.php">{{ lang.help }}</a></li>
+                        <li><a href="{{ site_url }}/contact.php">{{ lang.contact }}</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>{{ lang.stats }}</h4>
+                    <ul>
+                        <li>{{ total_threads }} {{ lang.threads }}</li>
+                        <li>{{ total_posts }} {{ lang.posts }}</li>
+                        <li>{{ total_members }} {{ lang.members }}</li>
+                        <li>{{ newest_member }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; {{ year }} {{ site_title }}. All rights reserved.</p>
+                <p>Powered by <a href="https://fastbb.io">FastBB</a> - Fast, lightweight forum software.</p>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

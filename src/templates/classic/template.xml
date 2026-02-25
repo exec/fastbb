@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template>
+    <name>Classic</name>
+    <version>1.0.0</version>
+    <author>FastBB Team</author>
+    <description>Classic MyBB-inspired template with table-based layout and simple design</description>
+    <template_set_id>classic</template_set_id>
+    <copyright>Copyright 2024 FastBB</copyright>
+    <license>MIT</license>
+    <features>
+        <responsive>true</responsive>
+        <dark_mode>false</dark_mode>
+        <accessibility>true</accessibility>
+        <bbcode>true</bbcode>
+        <smilies>true</smilies>
+        <table_layout>true</table_layout>
+    </features>
+    <files>
+        <file>index.html</file>
+        <file>forum.html</file>
+        <file>topic.html</file>
+        <file>post_form.html</file>
+        <file>user_profile.html</file>
+        <file>header.html</file>
+        <file>footer.html</file>
+        <file>style.css</file>
+    </files>
+    <colors>
+        <primary>#4a698a</primary>
+        <secondary>#6b8ca0</secondary>
+        <background>#e8e8e8</background>
+        <surface>#ffffff</surface>
+        <text>#333333</text>
+        <text_secondary>#666666</text_secondary>
+    </colors>
+</template>

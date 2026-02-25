@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ forum.name }} - {{ site_title }}</title>
+    <link rel="stylesheet" href="{{ template_path }}/style.css">
+    <link rel="alternate" type="application/rss+xml" title="{{ forum.name }} - {{ site_title }}" href="{{ site_url }}/forum/{{ forum.id }}/rss.php">
+</head>
+<body>
+    {% include 'header.html' %}
+
+    <main class="container">
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="{{ site_url }}/">{{ site_title }}</a></li>
+                {% for parent in forum.path %}
+                    <li><a href="{{ parent.url }}">{{ parent.name }}</a></li>
+                {% endfor %}
+                <li aria-current="page">{{ forum.name }}</li>
+            </ol>
+        </nav>
+
+        <section class="forum-header-section">
+            <div class="forum-header-content">
+                <h1 class="forum-title">{{ forum.name }}</h1>
+                {% if forum.description %}
+                    <p class="forum-description">{{ forum.description }}</p>
+                {% endif %}
+            </div>
+            <div class="forum-actions">
+                {% if forum.is_mod || current_user.is_admin %}
+                    <div class="forum-admin-actions">
+                        <a href="{{ site_url }}/admin/forum/{{ forum.id }}/edit" class="btn btn-sm btn-secondary">{{ lang.edit }}</a>
+                        <a href="{{ site_url }}/admin/forum/{{ forum.id }}/delete" class="btn btn-sm btn-danger">{{ lang.delete }}</a>
+                    </div>
+                {% endif %}
+                {% if current_user.is_logged_in %}
+                    <button type="button" class="btn btn-primary btn-thread" onclick="location.href='{{ site_url }}/newthread.php?fid={{ forum.id }}'">
+                        <span class="btn-icon">+</span>
+                        {{ lang.new_thread }}
+                    </button>
+                {% endif %}
+            </div>
+        </section>
+
+        {% if forum.moderators and forum.moderators|length > 0 %}
+            <div class="moderator-bar">
+                <span class="mod-label">{{ lang.moderated_by }}</span>
+                {% for mod in forum.moderators %}
+                    <a href="{{ mod.profile_url }}" class="moderator">{{ mod.name }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="thread-list-container">
+            <div class="thread-list-header">
+                <div class="thread-stats">
+                    <span class="stat-value">{{ threads|length }}</span>
+                    <span class="stat-label">{{ lang.threads }}</span>
+                </div>
+                <div class="sort-controls">
+                    <label for="sort-order">{{ lang.sort_by }}:</label>
+                    <select id="sort-order" name="sort" onchange="this.form.submit()">
+                        <option value="lastpost" {% if sort == 'lastpost' %}selected{% endif %}>{{ lang.last_post }}</option>
+                        <option value="subject" {% if sort == 'subject' %}selected{% endif %}>{{ lang.subject }}</option>
+                        <option value="starter" {% if sort == 'starter' %}selected{% endif %}>{{ lang.starter }}</option>
+                        <option value="rating" {% if sort == 'rating' %}selected{% endif %}>{{ lang.rating }}</option>
+                    </select>
+                </div>
+            </div>
+
+            {% if threads and threads|length > 0 %}
+                <div class="thread-list" role="table" aria-label="{{ lang.threads }}">
+                    <div class="thread-header" role="row" class="header">
+                        <div class="thread-icon" role="columnheader">{{ lang.thread }}</div>
+                        <div class="thread-author" role="columnheader">{{ lang.author }}</div>
+                        <div class="thread-stats" role="columnheader">{{ lang.replies }}</div>
+                        <div class="thread-views" role="columnheader">{{ lang.views }}</div>
+                        <div class="thread-latest" role="columnheader">{{ lang.last_post }}</div>
+                    </div>
+
+                    {% for thread in threads %}
+                        <div class="thread-row {% if thread.is_sticky %}sticky{% endif %} {% if thread.is_locked %}locked{% endif %}" role="row" aria-labelledby="thread-{{ thread.id }}">
+                            <div class="thread-icon" role="cell" id="thread-{{ thread.id }}">
+                                {% if thread.has_new_posts %}
+                                    <span class="icon icon-new" aria-label="{{ lang.new_posts }}"></span>
+                                {% endif %}
+                                {% if thread.is_sticky %}
+                                    <span class="icon icon-pin" aria-label="{{ lang.sticky }}"></span>
+                                {% endif %}
+                                {% if thread.is_locked %}
+                                    <span class="icon icon-lock" aria-label="{{ lang.locked }}"></span>
+                                {% endif %}
+                                <div class="thread-info">
+                                    <a href="{{ thread.url }}" class="thread-title{% if thread.is_poll %} has-poll{% endif %}">{{ thread.title }}</a>
+                                    {% if thread.is_poll %}
+                                        <span class="thread-label poll-label">{{ lang.poll }}</span>
+                                    {% endif %}
+                                    {% if thread.is_hot %}
+                                        <span class="thread-label hot-label">{{ lang.hot }}</span>
+                                    {% endif %}
+                                    <div class="thread-meta">
+                                        <span class="thread-page-info">{{ lang.page }} {{ thread.page }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="thread-author" role="cell">
+                                <a href="{{ thread.author_url }}" class="author-name">{{ thread.author }}</a>
+                                <time datetime="{{ thread.date_iso }}" class="thread-date">{{ thread.date }}</time>
+                            </div>
+                            <div class="thread-stats" role="cell">
+                                <span class="stat-value">{{ thread.reply_count }}</span>
+                            </div>
+                            <div class="thread-views" role="cell">
+                                <span class="stat-value">{{ thread.view_count }}</span>
+                            </div>
+                            <div class="thread-latest" role="cell">
+                                <a href="{{ thread.last_post_url }}" class="latest-preview">{{ thread.last_post_preview }}</a>
+                                <div class="latest-author">
+                                    {{ lang.by }} <a href="{{ thread.last_post_author_url }}">{{ thread.last_post_author }}</a>
+                                </div>
+                                <time datetime="{{ thread.last_post_date_iso }}" class="latest-date">{{ thread.last_post_date }}</time>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-threads">
+                    <p>{{ lang.no_threads_in_forum }}</p>
+                </div>
+            {% endif %}
+
+            {% if pagination.show %}
+                <nav class="pagination" aria-label="{{ lang.pagination }}">
+                    <ul class="pagination-list">
+                        {% if pagination.prev_url %}
+                            <li><a href="{{ pagination.prev_url }}" class="page-link">{{ lang.prev }}</a></li>
+                        {% endif %}
+                        {% for page in pagination.pages %}
+                            {% if page.url %}
+                                <li><a href="{{ page.url }}" class="page-link{% if page.active %} active{% endif %}">{{ page.number }}</a></li>
+                            {% else %}
+                                <li><span class="page-separator">{{ page.separator }}</span></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if pagination.next_url %}
+                            <li><a href="{{ pagination.next_url }}" class="page-link">{{ lang.next }}</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+</html>
